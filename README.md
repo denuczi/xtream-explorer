@@ -7,7 +7,6 @@ Local web client for exploring Xtream Codes accounts — live TV, movies and ser
 [![React](https://img.shields.io/badge/react-19-61DAFB?logo=react&logoColor=black)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/typescript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
-Developed by **Ignacio Sanguina**
 
 ---
 
