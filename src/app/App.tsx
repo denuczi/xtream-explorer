@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { PlugZap } from 'lucide-react';
 import { I18nProvider } from '../i18n/I18nProvider';
 import { useI18n } from '../i18n/useI18n';
@@ -7,12 +7,14 @@ import { ConnectionBar } from '../components/connection/ConnectionBar';
 import { AccountBar } from '../components/account/AccountBar';
 import { NavigationTabs, type CatalogTab } from '../components/navigation/NavigationTabs';
 import { useConnectionStore } from '../stores/connection-store';
-import { TvPage } from '../features/tv/TvPage';
-import { MoviesPage } from '../features/movies/MoviesPage';
-import { SeriesPage } from '../features/series/SeriesPage';
-import { PlayerModal } from '../components/player/PlayerModal';
 import { PlaylistDownloadButton } from '../components/navigation/PlaylistDownloadButton';
 import { ScrollToTopButton } from '../components/navigation/ScrollToTopButton';
+
+// Route-level code splitting: each tab and the player are loaded on demand.
+const TvPage = lazy(() => import('../features/tv/TvPage').then((m) => ({ default: m.TvPage })));
+const MoviesPage = lazy(() => import('../features/movies/MoviesPage').then((m) => ({ default: m.MoviesPage })));
+const SeriesPage = lazy(() => import('../features/series/SeriesPage').then((m) => ({ default: m.SeriesPage })));
+const PlayerModal = lazy(() => import('../components/player/PlayerModal').then((m) => ({ default: m.PlayerModal })));
 
 function ConnectPrompt() {
   const { t } = useI18n();
@@ -51,15 +53,25 @@ function Shell() {
         {!isConnected ? (
           <ConnectPrompt />
         ) : (
-          <>
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
+                {Array.from({ length: 12 }).map((_, index) => (
+                  <div key={index} className="aspect-[2/3] animate-pulse rounded-xl bg-surface" />
+                ))}
+              </div>
+            }
+          >
             {activeTab === 'tv' && <TvPage connectionId={connectionId} />}
             {activeTab === 'movies' && <MoviesPage connectionId={connectionId} />}
             {activeTab === 'series' && <SeriesPage connectionId={connectionId} />}
-          </>
+          </Suspense>
         )}
       </main>
 
-      <PlayerModal />
+      <Suspense fallback={null}>
+        <PlayerModal />
+      </Suspense>
       <ScrollToTopButton />
     </div>
   );
