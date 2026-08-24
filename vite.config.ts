@@ -13,4 +13,21 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    // hls.js is ~574kB minified but gzips to ~179kB; raise limit slightly to avoid noise.
+    chunkSizeWarningLimit: 600,
+    rolldownOptions: {
+      output: {
+        // Split vendor code to keep the main chunk stable and cache-friendly.
+        manualChunks(id) {
+          if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/')) return 'vendor';
+          if (id.includes('node_modules/react')) return 'vendor';
+          if (id.includes('node_modules/lucide-react')) return 'ui';
+          if (id.includes('node_modules/zustand')) return 'state';
+          if (id.includes('node_modules/zod')) return 'validation';
+          return undefined;
+        },
+      },
+    },
+  },
 });
