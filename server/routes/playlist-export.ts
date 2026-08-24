@@ -8,6 +8,8 @@ import { validationError } from '../xtream/errors';
 import { bindAbortToRequest, parseCatalogType, requireSession } from './session';
 import { getCategoriesCached, getStreamsCached } from './catalog';
 import type { Channel, Movie, SeriesSummary } from '../schemas/catalog';
+import type { StoredSession } from '../services/session-store';
+import { RequestAbortedError } from '../xtream/errors';
 
 const FILENAMES: Record<CatalogType, string> = {
   tv: 'iptv-live.m3u8',
@@ -24,17 +26,39 @@ function dedupeById<T extends { id: string }>(items: T[]): T[] {
   });
 }
 
-async function buildTvEntries(
-  session: Parameters<typeof getStreamsCached>[0],
+// Fetch streams category by category to keep each upstream response under the size cap.
+async function collectStreamsForExport(
+  session: StoredSession,
+  type: CatalogType,
+  categories: { id: string }[],
   signal?: AbortSignal,
-): Promise<M3uItem[]> {
-  const [channels, categories] = await Promise.all([
-    getStreamsCached(session, 'tv', null, signal),
-    getCategoriesCached(session, 'tv', signal),
-  ]);
+): Promise<unknown[]> {
+  if (categories.length === 0) {
+    return (await getStreamsCached(session, type, null, signal)) as unknown[];
+  }
+
+  const settled = await Promise.allSettled(
+    categories.map((category) => getStreamsCached(session, type, category.id, signal)),
+  );
+
+  const aggregated: unknown[] = [];
+  for (const result of settled) {
+    if (result.status === 'fulfilled') aggregated.push(...(result.value as unknown[]));
+  }
+
+  if (aggregated.length > 0) return aggregated;
+  if (signal?.aborted) throw new RequestAbortedError();
+
+  // All per-category requests failed: fallback to full catalog so the original error surfaces.
+  return (await getStreamsCached(session, type, null, signal)) as unknown[];
+}
+
+async function buildTvEntries(session: StoredSession, signal?: AbortSignal): Promise<M3uItem[]> {
+  const categories = await getCategoriesCached(session, 'tv', signal);
+  const rawChannels = await collectStreamsForExport(session, 'tv', categories, signal);
   const categoryNames = new Map(categories.map((category) => [category.id, category.name]));
 
-  return dedupeById(channels as Channel[]).map((channel) => ({
+  return dedupeById(rawChannels as Channel[]).map((channel) => ({
     id: channel.id,
     name: channel.name,
     logo: channel.logo,
@@ -44,47 +68,31 @@ async function buildTvEntries(
   }));
 }
 
-async function buildMovieEntries(
-  session: Parameters<typeof getStreamsCached>[0],
-  signal?: AbortSignal,
-): Promise<M3uItem[]> {
-  const [movies, categories] = await Promise.all([
-    getStreamsCached(session, 'movies', null, signal),
-    getCategoriesCached(session, 'movies', signal),
-  ]);
+async function buildMovieEntries(session: StoredSession, signal?: AbortSignal): Promise<M3uItem[]> {
+  const categories = await getCategoriesCached(session, 'movies', signal);
+  const rawMovies = await collectStreamsForExport(session, 'movies', categories, signal);
   const categoryNames = new Map(categories.map((category) => [category.id, category.name]));
 
-  return dedupeById(movies as Movie[]).map((movie) => ({
+  return dedupeById(rawMovies as Movie[]).map((movie) => ({
     id: movie.id,
     name: movie.name,
     logo: movie.logo,
     category: movie.categoryId !== '' ? (categoryNames.get(movie.categoryId) ?? null) : null,
     tvgId: movie.id,
-    url: buildDirectStreamUrl(
-      session,
-      'movie',
-      movie.id,
-      movie.extension ?? 'mp4',
-    ),
+    url: buildDirectStreamUrl(session, 'movie', movie.id, movie.extension ?? 'mp4'),
   }));
 }
 
-/**
- * Series export: full catalog as JSON. Series the user browsed carry their
- * cached seasons/episodes; the rest stay list-level to avoid hammering the
- * panel with one request per series.
- */
+// Series export reuses cached detail when available; otherwise stays list-level.
 async function buildSeriesPayload(
-  session: Parameters<typeof getStreamsCached>[0],
+  session: StoredSession,
   signal?: AbortSignal,
 ): Promise<Record<string, unknown>> {
-  const [seriesList, categories] = await Promise.all([
-    getStreamsCached(session, 'series', null, signal),
-    getCategoriesCached(session, 'series', signal),
-  ]);
+  const categories = await getCategoriesCached(session, 'series', signal);
+  const rawSeries = await collectStreamsForExport(session, 'series', categories, signal);
   const categoryNames = new Map(categories.map((category) => [category.id, category.name]));
 
-  const items = dedupeById(seriesList as SeriesSummary[]).map((series) => {
+  const items = dedupeById(rawSeries as SeriesSummary[]).map((series) => {
     const detail = session.catalog.seriesInfoById.get(series.id);
     return {
       id: series.id,
