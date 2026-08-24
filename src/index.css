@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme {
+  --color-app: #0a0c10;
+  --color-surface: #131722;
+  --color-surface-raised: #1a2030;
+  --color-line: #262d3f;
+  --color-accent: #8b7cff;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-app);
+  color: var(--color-zinc-100, #f4f4f5);
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Slim themed scrollbar for internal scrollers (category rail, episodes…). */
+.scroll-slim {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+.scroll-slim::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.scroll-slim::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-slim::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background-color: var(--color-line);
+}
+.scroll-slim::-webkit-scrollbar-thumb:hover {
+  background-color: #39415a;
+}
+
+/* Soft vertical edge fade that only applies while the list actually overflows
+   (toggled via .useOverflowY). Masks the content itself — no overlay artifacts. */
+.fade-edges-y {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 14px,
+    #000 calc(100% - 14px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 14px,
+    #000 calc(100% - 14px),
+    transparent 100%
+  );
+}
+
+/* Player modal entrance */
+@keyframes modal-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-modal-pop {
+  animation: modal-pop 0.18s ease-out both;
+}
+@keyframes backdrop-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-backdrop-fade {
+  animation: backdrop-fade 0.15s ease-out both;
+}
