@@ -38,7 +38,14 @@ export const XTREAM_USER_AGENT = process.env.XTREAM_USER_AGENT?.trim() || DEFAUL
 const CONNECT_TIMEOUT_MS = 10_000;
 const HEADER_TIMEOUT_MS = 25_000;
 const BODY_TIMEOUT_MS = 25_000;
-const MAX_RESPONSE_BYTES = 20 * 1024 * 1024; // 20 MiB cap on JSON payloads
+// Cap on JSON payloads from the panel, configurable via XTREAM_MAX_RESPONSE_BYTES (bytes).
+const MAX_RESPONSE_BYTES = (() => {
+  const raw = process.env.XTREAM_MAX_RESPONSE_BYTES?.trim();
+  if (raw === undefined || raw === '') return 100 * 1024 * 1024;
+  const parsed = Number(raw);
+  if (!Number.isFinite(parsed) || parsed <= 0) return 100 * 1024 * 1024;
+  return Math.floor(parsed);
+})();
 const MAX_REDIRECTS = 3;
 
 const sharedDispatcher: Dispatcher = new Agent({
