@@ -32,20 +32,20 @@ export function AccountBar({ account }: { account: AccountInfo }) {
   return (
     <section
       aria-label={t.appName}
-      className="grid grid-cols-2 gap-3 rounded-xl border border-line bg-surface p-4 sm:grid-cols-4"
+      className="flex flex-wrap gap-x-8 gap-y-4 border-y border-line py-4"
     >
       {cells.map((cell) => (
-        <div key={cell.label}>
-          <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{cell.label}</p>
-          <p className="mt-1 text-sm font-semibold text-zinc-100">{cell.value}</p>
+        <div key={cell.label} className="min-w-[120px] flex-1">
+          <p className="text-[11px] font-medium text-white/56">{cell.label}</p>
+          <p className="mt-1 text-[13px] font-medium leading-none text-white">{cell.value}</p>
         </div>
       ))}
 
-      <div>
-        <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{t.account.status}</p>
+      <div className="min-w-[120px] flex-1">
+        <p className="text-[11px] font-medium text-white/56">{t.account.status}</p>
         <p
-          className={`mt-1 inline-flex items-center gap-1.5 text-sm font-semibold ${
-            !isStatusKnown ? 'text-zinc-100' : isActive ? 'text-emerald-400' : 'text-amber-400'
+          className={`mt-1 inline-flex items-center gap-1.5 text-[13px] font-medium leading-none ${
+            !isStatusKnown ? 'text-white' : isActive ? 'text-emerald-400' : 'text-amber-400'
           }`}
         >
           {!isStatusKnown ? (
