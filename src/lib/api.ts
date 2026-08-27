@@ -13,6 +13,7 @@ import type {
   StreamTargets,
   VodDetail,
 } from '../types/models';
+import { normalizeRating } from './rating';
 
 const API_BASE: string = import.meta.env.VITE_API_URL ?? '/api';
 const CONNECTION_ID_HEADER = 'x-connection-id';
@@ -187,7 +188,10 @@ const movieSchema = z.object({
   logo: z.string().nullable(),
   categoryId: z.string(),
   extension: z.string().nullable(),
-  rating: z.string().nullable(),
+  rating: z
+    .string()
+    .nullable()
+    .transform((value) => normalizeRating(value)),
 });
 
 const seriesSummarySchema = z.object({
@@ -197,7 +201,10 @@ const seriesSummarySchema = z.object({
   categoryId: z.string(),
   plot: z.string().nullable(),
   genre: z.string().nullable(),
-  rating: z.string().nullable(),
+  rating: z
+    .string()
+    .nullable()
+    .transform((value) => normalizeRating(value)),
 });
 
 const seasonSchema = z.object({
@@ -222,7 +229,10 @@ const seriesDetailSchema = z.object({
   cover: z.string().nullable(),
   plot: z.string().nullable(),
   genre: z.string().nullable(),
-  rating: z.string().nullable(),
+  rating: z
+    .string()
+    .nullable()
+    .transform((value) => normalizeRating(value)),
   releaseDate: z.string().nullable(),
   seasons: z.array(seasonSchema),
   episodes: z.array(episodeSchema),
@@ -334,7 +344,10 @@ const vodDetailSchema = z.object({
   genre: z.string().nullable(),
   releaseDate: z.string().nullable(),
   duration: z.string().nullable(),
-  rating: z.string().nullable(),
+  rating: z
+    .string()
+    .nullable()
+    .transform((value) => normalizeRating(value)),
   youtubeTrailer: z.string().nullable(),
   extension: z.string().nullable(),
   categoryId: z.string(),
