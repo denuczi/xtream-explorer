@@ -7,6 +7,7 @@ import { ConnectionBar } from '../components/connection/ConnectionBar';
 import { AccountBar } from '../components/account/AccountBar';
 import { NavigationTabs, type CatalogTab } from '../components/navigation/NavigationTabs';
 import { useConnectionStore } from '../stores/connection-store';
+import { AppFooter } from '../components/navigation/AppFooter';
 import { PlaylistDownloadButton } from '../components/navigation/PlaylistDownloadButton';
 import { ScrollToTopButton } from '../components/navigation/ScrollToTopButton';
 
@@ -77,6 +78,8 @@ function Shell() {
           </Suspense>
         )}
       </main>
+
+      <AppFooter />
 
       <Suspense fallback={null}>
         <PlayerModal />
