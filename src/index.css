@@ -1,21 +1,49 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-app: #0a0c10;
-  --color-surface: #131722;
-  --color-surface-raised: #1a2030;
-  --color-line: #262d3f;
-  --color-accent: #8b7cff;
+  --color-surface: #14171d;
+  --color-surface-raised: #1c2028;
+  --color-line: rgb(255 255 255 / 10%);
+  --color-line-strong: rgb(255 255 255 / 16%);
+  --color-hover: rgb(255 255 255 / 9%);
+  --color-pressed: rgb(255 255 255 / 14%);
+  --color-accent: #ffffff;
+  --color-accent-fg: #0a0c10;
+  --color-muted: rgb(255 255 255 / 56%);
+  --color-subtle: rgb(255 255 255 / 46%);
 }
 
 html {
   color-scheme: dark;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 14%) transparent;
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+}
+
+html::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background-color: rgb(255 255 255 / 14%);
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(255 255 255 / 22%);
 }
 
 body {
   margin: 0;
   background-color: var(--color-app);
-  color: var(--color-zinc-100, #f4f4f5);
+  color: #f4f4f5;
   font-family:
     ui-sans-serif,
     system-ui,
@@ -26,12 +54,24 @@ body {
     Arial,
     sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  line-height: 1.6;
+  overscroll-behavior-y: contain;
 }
 
-/* Slim themed scrollbar for internal scrollers (category rail, episodes…). */
+::selection {
+  background: rgb(255 255 255 / 14%);
+}
+
+:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 80%);
+  outline-offset: 2px;
+}
+
 .scroll-slim {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-line) transparent;
+  scrollbar-color: rgb(255 255 255 / 14%) transparent;
 }
 .scroll-slim::-webkit-scrollbar {
   width: 6px;
@@ -42,10 +82,10 @@ body {
 }
 .scroll-slim::-webkit-scrollbar-thumb {
   border-radius: 9999px;
-  background-color: var(--color-line);
+  background-color: rgb(255 255 255 / 14%);
 }
 .scroll-slim::-webkit-scrollbar-thumb:hover {
-  background-color: #39415a;
+  background-color: rgb(255 255 255 / 20%);
 }
 
 /* Soft vertical edge fade that only applies while the list actually overflows
@@ -67,11 +107,10 @@ body {
   );
 }
 
-/* Player modal entrance */
 @keyframes modal-pop {
   from {
     opacity: 0;
-    transform: scale(0.96) translateY(10px);
+    transform: scale(0.97) translateY(8px);
   }
   to {
     opacity: 1;
@@ -91,4 +130,15 @@ body {
 }
 .animate-backdrop-fade {
   animation: backdrop-fade 0.15s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-modal-pop,
+  .animate-backdrop-fade {
+    animation: none;
+  }
 }
