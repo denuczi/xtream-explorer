@@ -52,11 +52,11 @@ export function SeriesDetailPanel({ summary, onBack }: SeriesDetailPanelProps) {
   }, [detail, effectiveSeason]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       <button
         type="button"
         onClick={onBack}
-        className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-1.5 text-sm font-medium text-zinc-200 transition hover:bg-surface-raised focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className="inline-flex items-center gap-2 rounded-[10px] border border-line bg-surface px-3 py-1.5 text-[13px] font-medium text-white transition hover:bg-hover"
       >
         <ArrowLeft className="h-4 w-4" aria-hidden />
         {t.catalog.backToGrid}
@@ -69,7 +69,7 @@ export function SeriesDetailPanel({ summary, onBack }: SeriesDetailPanelProps) {
       ) : detail !== null ? (
         <>
           <div className="flex flex-col gap-6 sm:flex-row">
-            <div className="aspect-[2/3] w-40 shrink-0 overflow-hidden rounded-xl border border-line bg-surface-raised">
+            <div className="aspect-[2/3] w-44 shrink-0 overflow-hidden rounded-[12px] border border-line bg-surface">
               {detail.cover !== null ? (
                 <img
                   src={detail.cover}
@@ -82,23 +82,36 @@ export function SeriesDetailPanel({ summary, onBack }: SeriesDetailPanelProps) {
             </div>
 
             <div className="min-w-0">
-              <h2 className="text-lg font-semibold text-zinc-100">
+              <h2
+                title={detail.name.length > 0 ? detail.name : summary.name}
+                className="text-[18px] font-semibold leading-tight tracking-tight text-white"
+              >
                 {detail.name.length > 0 ? detail.name : summary.name}
               </h2>
-              <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500">
+              <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-white/46">
                 {detail.releaseDate !== null && <span>{detail.releaseDate}</span>}
                 {detail.genre !== null && <span>{detail.genre}</span>}
-                {detail.rating !== null && <span>★ {detail.rating}</span>}
+                {detail.rating !== null && (
+                  <span className="inline-flex items-center gap-1 text-white">
+                    ★ {detail.rating}
+                  </span>
+                )}
               </p>
               {detail.plot !== null && (
-                <p className="mt-3 max-w-3xl text-sm leading-relaxed text-zinc-400">{detail.plot}</p>
+                <p className="mt-3 max-w-3xl text-[13px] leading-relaxed text-white/60">
+                  {detail.plot}
+                </p>
               )}
             </div>
           </div>
 
           {seasons.length > 0 && (
             <div className="space-y-4">
-              <div className="flex flex-wrap gap-2" role="tablist" aria-label={t.catalog.seasonsTitle}>
+              <div
+                className="flex flex-wrap gap-1.5"
+                role="tablist"
+                aria-label={t.catalog.seasonsTitle}
+              >
                 {seasons.map((season) => {
                   const isActive = season.number === effectiveSeason;
                   return (
@@ -107,11 +120,12 @@ export function SeriesDetailPanel({ summary, onBack }: SeriesDetailPanelProps) {
                       type="button"
                       role="tab"
                       aria-selected={isActive}
+                      title={formatSeasonLabel(t.catalog.seasonWord, season)}
                       onClick={() => setActiveSeason(season.number)}
-                      className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
+                      className={`cursor-pointer rounded-[10px] px-3 py-1.5 text-[13px] font-medium transition ${
                         isActive
-                          ? 'bg-accent text-white'
-                          : 'border border-line bg-surface text-zinc-300 hover:bg-surface-raised hover:text-zinc-100'
+                          ? 'bg-white text-app'
+                          : 'text-white/60 hover:bg-hover hover:text-white'
                       }`}
                     >
                       {formatSeasonLabel(t.catalog.seasonWord, season)}
@@ -120,9 +134,12 @@ export function SeriesDetailPanel({ summary, onBack }: SeriesDetailPanelProps) {
                 })}
               </div>
 
-              <ul className="scroll-slim fade-edges-y max-h-[55vh] divide-y divide-line overflow-y-auto rounded-xl border border-line bg-surface">
+              <ul className="scroll-slim max-h-[56vh] divide-y divide-white/5 overflow-y-auto rounded-[12px] border border-line bg-surface">
                 {episodes.map((episode) => (
-                  <li key={`${episode.seasonNumber}-${episode.id}`} className="flex items-center gap-3 px-3 py-2.5">
+                  <li
+                    key={`${episode.seasonNumber}-${episode.id}`}
+                    className="flex items-center gap-3 px-3 py-2.5"
+                  >
                     <div className="h-10 w-16 shrink-0 overflow-hidden rounded-md bg-surface-raised">
                       {episode.image !== null && (
                         <img
@@ -135,10 +152,19 @@ export function SeriesDetailPanel({ summary, onBack }: SeriesDetailPanelProps) {
                       )}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm text-zinc-100">
-                        {episode.title.length > 0 ? episode.title : `${t.catalog.episodesTitle} ${episode.episodeNumber ?? ''}`}
+                      <p
+                        title={
+                          episode.title.length > 0
+                            ? episode.title
+                            : `${t.catalog.episodesTitle} ${episode.episodeNumber ?? ''}`
+                        }
+                        className="cursor-pointer truncate text-[13px] font-medium text-white"
+                      >
+                        {episode.title.length > 0
+                          ? episode.title
+                          : `${t.catalog.episodesTitle} ${episode.episodeNumber ?? ''}`}
                       </p>
-                      <p className="text-[11px] uppercase tracking-wide text-zinc-500">
+                      <p className="text-[11px] text-white/46">
                         S{String(episode.seasonNumber).padStart(2, '0')}
                         {episode.episodeNumber !== null
                           ? `E${String(episode.episodeNumber).padStart(2, '0')}`
@@ -147,6 +173,7 @@ export function SeriesDetailPanel({ summary, onBack }: SeriesDetailPanelProps) {
                     </div>
                     <button
                       type="button"
+                      title={episode.title.length > 0 ? episode.title : undefined}
                       aria-label={`${t.nav.series}: ${episode.title}`}
                       onClick={() => {
                         if (detail === null) return;
@@ -167,14 +194,16 @@ export function SeriesDetailPanel({ summary, onBack }: SeriesDetailPanelProps) {
                           },
                         });
                       }}
-                      className="shrink-0 rounded-lg border border-line bg-surface-raised p-2 text-zinc-300 transition hover:border-accent/60 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                      className="shrink-0 cursor-pointer rounded-[10px] border border-line bg-surface p-2 text-white/70 transition hover:bg-hover hover:text-white"
                     >
                       <Play className="h-4 w-4" aria-hidden />
                     </button>
                   </li>
                 ))}
                 {episodes.length === 0 && (
-                  <li className="px-3 py-6 text-center text-sm text-zinc-500">{t.catalog.empty}</li>
+                  <li className="px-3 py-6 text-center text-[13px] text-white/46">
+                    {t.catalog.empty}
+                  </li>
                 )}
               </ul>
             </div>

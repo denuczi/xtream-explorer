@@ -23,7 +23,7 @@ export function NavigationTabs({ active, onChange }: NavigationTabsProps) {
   const { t } = useI18n();
 
   return (
-    <nav aria-label="Catalog" className="flex gap-2">
+    <nav aria-label="Catalog" className="flex gap-1.5">
       {TABS.map(({ id, icon: Icon }) => {
         const isActive = id === active;
         return (
@@ -32,10 +32,10 @@ export function NavigationTabs({ active, onChange }: NavigationTabsProps) {
             type="button"
             aria-current={isActive ? 'page' : undefined}
             onClick={() => onChange(id)}
-            className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
+            className={`inline-flex h-9 cursor-pointer items-center gap-2 rounded-[10px] px-4 text-[13px] font-medium transition ${
               isActive
-                ? 'bg-accent text-white'
-                : 'border border-line bg-surface text-zinc-300 hover:bg-surface-raised hover:text-zinc-100'
+                ? 'bg-white text-app'
+                : 'border border-transparent text-white/60 hover:bg-hover hover:text-white'
             }`}
           >
             <Icon className="h-4 w-4" aria-hidden />

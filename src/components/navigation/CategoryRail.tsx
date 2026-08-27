@@ -38,15 +38,18 @@ export function CategoryRail({ type, connectionId, onSelectCategory }: CategoryR
   }, [entry.data, debouncedQuery]);
 
   return (
-    <aside className="w-full shrink-0 lg:w-60">
+    <aside className="w-full shrink-0 lg:w-[220px]">
       <div className="relative">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" aria-hidden />
+        <Search
+          className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30"
+          aria-hidden
+        />
         <input
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder={t.catalog.searchCategories}
-          className="w-full rounded-lg border border-line bg-surface py-2 pl-9 pr-3 text-sm text-zinc-100 placeholder:text-zinc-500 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
+          className="w-full rounded-[10px] border border-line bg-surface py-2 pl-9 pr-3 text-[13px] text-white placeholder:text-white/30 outline-none transition focus:border-white/20 focus:ring-2 focus:ring-white/10"
         />
       </div>
 
@@ -54,7 +57,7 @@ export function CategoryRail({ type, connectionId, onSelectCategory }: CategoryR
         <nav
           ref={navRef}
           aria-label={t.nav[type]}
-          className={`scroll-slim mt-3 flex max-h-40 gap-1.5 overflow-x-auto pb-1 lg:max-h-[calc(100vh-19rem)] lg:flex-col lg:overflow-y-auto lg:overflow-x-hidden lg:pr-1.5 ${
+          className={`scroll-slim mt-3 flex max-h-40 gap-1.5 overflow-x-auto pb-1 lg:max-h-[calc(100vh-20rem)] lg:flex-col lg:overflow-y-auto lg:overflow-x-hidden lg:pr-1.5 ${
             navOverflows ? 'fade-edges-y' : ''
           }`}
         >
@@ -78,10 +81,10 @@ export function CategoryRail({ type, connectionId, onSelectCategory }: CategoryR
                   }}
                   aria-current={isActive ? 'true' : undefined}
                   title={category.name.length > 0 ? category.name : undefined}
-                  className={`shrink-0 whitespace-nowrap rounded-lg px-3 py-1.5 text-left text-sm transition lg:w-full ${
+                  className={`shrink-0 cursor-pointer whitespace-nowrap rounded-[10px] px-3 py-2 text-left text-[13px] transition lg:w-full ${
                     isActive
-                      ? 'bg-accent font-semibold text-white'
-                      : 'bg-surface text-zinc-300 hover:bg-surface-raised hover:text-zinc-100'
+                      ? 'bg-white font-medium text-app'
+                      : 'text-white/60 hover:bg-hover hover:text-white'
                   }`}
                 >
                   {category.name.length > 0 ? category.name : t.catalog.untitled}

@@ -62,7 +62,10 @@ export interface PlaybackApi extends PlaybackState {
  * Engines: hls.js for manifests, mpegts.js for raw live TS, native otherwise.
  */
 export function usePlayback({ videoRef, src, extension }: UsePlaybackOptions): PlaybackApi {
-  const [state, setState] = useState<PlaybackState>({ phase: 'loading', retriesLeft: MAX_AUTO_RETRIES });
+  const [state, setState] = useState<PlaybackState>({
+    phase: 'loading',
+    retriesLeft: MAX_AUTO_RETRIES,
+  });
   const [audioTracks, setAudioTracks] = useState<AudioTrackOption[]>([]);
   const [activeAudioTrack, setActiveAudioTrack] = useState<number | null>(null);
   const [attemptToken, setAttemptToken] = useState(0);
@@ -106,7 +109,11 @@ export function usePlayback({ videoRef, src, extension }: UsePlaybackOptions): P
       if (autoRetriesUsed < MAX_AUTO_RETRIES && code !== 'unsupported') {
         const delay = BACKOFF_MS[Math.min(autoRetriesUsed, BACKOFF_MS.length - 1)];
         autoRetriesUsed += 1;
-        setState({ phase: 'loading', errorCode: code, retriesLeft: MAX_AUTO_RETRIES - autoRetriesUsed });
+        setState({
+          phase: 'loading',
+          errorCode: code,
+          retriesLeft: MAX_AUTO_RETRIES - autoRetriesUsed,
+        });
         retryTimerRef.current = setTimeout(() => setAttemptToken((n) => n + 1), delay);
       } else {
         clearPendingRetry();

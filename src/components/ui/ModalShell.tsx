@@ -52,9 +52,9 @@ export function ModalShell({
       const root = dialogRef.current;
       if (root === null) return;
 
-      const focusables = Array.from(
-        root.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
-      ).filter((element) => element.getClientRects().length > 0);
+      const focusables = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
+        (element) => element.getClientRects().length > 0,
+      );
 
       if (focusables.length === 0) {
         event.preventDefault();
@@ -100,7 +100,7 @@ export function ModalShell({
           aria-modal="true"
           aria-label={ariaLabel}
           aria-labelledby={labelledBy}
-          className="animate-modal-pop overflow-hidden rounded-xl border border-line bg-surface shadow-2xl outline-none"
+          className="animate-modal-pop overflow-hidden rounded-[12px] border border-white/10 bg-surface shadow-2xl outline-none"
         >
           {children}
         </div>

@@ -19,7 +19,7 @@ export function ScrollToTopButton() {
       title={t.common.backToTop}
       tabIndex={visible ? 0 : -1}
       onClick={handleClick}
-      className={`fixed bottom-6 right-6 z-40 rounded-full border border-line bg-surface-raised p-3 text-zinc-200 shadow-lg transition-all duration-200 hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+      className={`fixed bottom-6 right-6 z-40 rounded-full border border-line bg-surface p-3 text-white/70 shadow-lg transition-all duration-200 hover:bg-hover hover:text-white ${
         visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-2 opacity-0'
       }`}
     >

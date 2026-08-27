@@ -1,20 +1,13 @@
 import type { ConnectionStatus } from '../../types/models';
 import { useI18n } from '../../i18n/useI18n';
 import type { Dictionary } from '../../i18n/dictionaries';
-
-/** Shared so the header collapse button can mirror connection state. */
-export const STATUS_DOT_CLASSES: Record<ConnectionStatus, string> = {
-  disconnected: 'bg-zinc-500',
-  connecting: 'bg-amber-400 animate-pulse',
-  connected: 'bg-emerald-400',
-  error: 'bg-red-500',
-};
+import { STATUS_DOT_CLASSES } from './status';
 
 const PILL_CLASSES: Record<ConnectionStatus, string> = {
-  disconnected: 'border-line text-zinc-400',
-  connecting: 'border-amber-500/40 text-amber-300',
-  connected: 'border-emerald-500/40 text-emerald-300',
-  error: 'border-red-500/40 text-red-300',
+  disconnected: 'border-line text-white/56',
+  connecting: 'border-amber-500/20 bg-amber-500/10 text-amber-200',
+  connected: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-200',
+  error: 'border-red-500/20 bg-red-500/10 text-red-200',
 };
 
 const STATUS_KEYS: Record<ConnectionStatus, keyof Dictionary['status']> = {

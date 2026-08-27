@@ -48,7 +48,8 @@ function cardPropsFor(
       imageUrl: item.logo,
       subtitle: item.number === null ? null : `#${item.number}`,
       badge: null,
-      onClick: onOpenPlayer === undefined ? undefined : () => onOpenPlayer('channel', item.id, item.name),
+      onClick:
+        onOpenPlayer === undefined ? undefined : () => onOpenPlayer('channel', item.id, item.name),
     };
   }
   if ('cover' in item) {
@@ -69,11 +70,17 @@ function cardPropsFor(
     imageUrl: item.logo,
     subtitle: null,
     badge: variant === 'poster' ? item.rating : null,
-    onClick: onOpenPlayer === undefined ? undefined : () => onOpenPlayer('movie', item.id, item.name),
+    onClick:
+      onOpenPlayer === undefined ? undefined : () => onOpenPlayer('movie', item.id, item.name),
   };
 }
 
-export function CatalogBrowser({ type, variant, connectionId, onSelectSeries }: CatalogBrowserProps) {
+export function CatalogBrowser({
+  type,
+  variant,
+  connectionId,
+  onSelectSeries,
+}: CatalogBrowserProps) {
   const { t } = useI18n();
   const [rawQuery, setRawQuery] = useState('');
   const debouncedQuery = useDebouncedValue(rawQuery.trim(), 250);
@@ -123,7 +130,11 @@ export function CatalogBrowser({ type, variant, connectionId, onSelectSeries }: 
 
   // Auto-select the first category once its list arrives.
   useEffect(() => {
-    if (categories.status === 'success' && activeId === null && (categories.data?.length ?? 0) > 0) {
+    if (
+      categories.status === 'success' &&
+      activeId === null &&
+      (categories.data?.length ?? 0) > 0
+    ) {
       const first = categories.data?.[0];
       if (first !== undefined) {
         selectCategory(type, first.id);
@@ -139,10 +150,12 @@ export function CatalogBrowser({ type, variant, connectionId, onSelectSeries }: 
         : t.catalog.searchSeries;
 
   return (
-    <div className="space-y-4">
-      {/* Content search — scoped to the active tab */}
-      <div className="relative max-w-xl">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" aria-hidden />
+    <div className="space-y-6">
+      <div className="relative max-w-[520px]">
+        <Search
+          className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30"
+          aria-hidden
+        />
         <input
           type="text"
           enterKeyHint="search"
@@ -151,21 +164,21 @@ export function CatalogBrowser({ type, variant, connectionId, onSelectSeries }: 
           onChange={(event) => setRawQuery(event.target.value)}
           placeholder={searchPlaceholder}
           aria-label={searchPlaceholder}
-          className="w-full rounded-lg border border-line bg-surface py-2.5 pl-9 pr-9 text-sm text-zinc-100 placeholder:text-zinc-500 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
+          className="w-full rounded-[10px] border border-line bg-surface py-2.5 pl-9 pr-9 text-[13px] text-white placeholder:text-white/30 outline-none transition focus:border-white/20 focus:ring-2 focus:ring-white/10"
         />
         {rawQuery.length > 0 && (
           <button
             type="button"
             aria-label={t.catalog.clearSearch}
             onClick={() => setRawQuery('')}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-zinc-500 transition hover:bg-surface-raised hover:text-zinc-200"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-white/40 transition hover:bg-hover hover:text-white"
           >
             <X className="h-4 w-4" aria-hidden />
           </button>
         )}
       </div>
 
-      <div className="flex flex-col gap-5 lg:flex-row">
+      <div className="flex flex-col gap-8 lg:flex-row">
         <CategoryRail
           type={type}
           connectionId={connectionId}
@@ -181,49 +194,61 @@ export function CatalogBrowser({ type, variant, connectionId, onSelectSeries }: 
                 <ErrorState onRetry={() => void ensureAllStreams(type)} />
               )}
 
-              {allEntry?.status === 'success' && (
-                totalMatches === 0 ? (
-                  <div className="flex items-center justify-center rounded-xl border border-dashed border-line bg-surface/40 px-6 py-14 text-center">
-                    <p className="text-sm text-zinc-500">
-                      {t.catalog.noResults} <span className="font-semibold text-zinc-300">“{debouncedQuery}”</span>
+              {allEntry?.status === 'success' &&
+                (totalMatches === 0 ? (
+                  <div className="flex items-center justify-center rounded-[12px] border border-line bg-surface px-6 py-14 text-center">
+                    <p className="text-[13px] text-white/46">
+                      {t.catalog.noResults}{' '}
+                      <span className="font-medium text-white">“{debouncedQuery}”</span>
                     </p>
                   </div>
                 ) : (
                   <>
-                    <p className="mb-3 text-xs font-medium uppercase tracking-wide text-zinc-500">
+                    <p className="mb-3 text-[11px] font-medium text-white/46">
                       {interpolate(t.catalog.resultsCount, { count: totalMatches })}
                       {totalMatches > MAX_SEARCH_RESULTS ? ` · ${t.catalog.truncatedNote}` : ''}
                     </p>
-                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
+                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
                       {visibleResults.map((item) => {
-                        const { key, ...cardProps } = cardPropsFor(item, variant, onSelectSeries, handleOpenPlayer);
+                        const { key, ...cardProps } = cardPropsFor(
+                          item,
+                          variant,
+                          onSelectSeries,
+                          handleOpenPlayer,
+                        );
                         return <MediaCard key={key} variant={variant} {...cardProps} />;
                       })}
                     </div>
                   </>
-                )
-              )}
+                ))}
             </>
           ) : (
             <>
               {streamsEntry?.status === 'loading' && <GridSkeleton variant={variant} />}
 
               {streamsEntry?.status === 'error' && (
-                <ErrorState onRetry={() => activeId !== null && void ensureStreams(type, activeId)} />
+                <ErrorState
+                  onRetry={() => activeId !== null && void ensureStreams(type, activeId)}
+                />
               )}
 
-              {streamsEntry?.status === 'success' && streamsEntry.data !== null && (
-                streamsEntry.data.length === 0 ? (
+              {streamsEntry?.status === 'success' &&
+                streamsEntry.data !== null &&
+                (streamsEntry.data.length === 0 ? (
                   <EmptyState />
                 ) : (
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
+                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
                     {streamsEntry.data.map((item) => {
-                      const { key, ...cardProps } = cardPropsFor(item, variant, onSelectSeries, handleOpenPlayer);
+                      const { key, ...cardProps } = cardPropsFor(
+                        item,
+                        variant,
+                        onSelectSeries,
+                        handleOpenPlayer,
+                      );
                       return <MediaCard key={key} variant={variant} {...cardProps} />;
                     })}
                   </div>
-                )
-              )}
+                ))}
 
               {(streamsEntry === undefined || streamsEntry.status === 'idle') && (
                 <GridSkeleton variant={variant} />

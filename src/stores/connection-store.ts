@@ -1,6 +1,11 @@
 import { create } from 'zustand';
 import { ApiError, connectPlaylist, deleteConnection, postConnection } from '../lib/api';
-import type { AccountInfo, ApiErrorCode, ConnectionCredentials, ConnectionStatus } from '../types/models';
+import type {
+  AccountInfo,
+  ApiErrorCode,
+  ConnectionCredentials,
+  ConnectionStatus,
+} from '../types/models';
 
 interface ConnectionState {
   status: ConnectionStatus;

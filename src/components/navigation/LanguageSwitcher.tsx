@@ -20,10 +20,8 @@ export function LanguageSwitcher() {
             type="button"
             aria-pressed={isActive}
             onClick={() => setLocale(code)}
-            className={`rounded-full px-2.5 py-1 text-xs font-semibold transition ${
-              isActive
-                ? 'bg-accent text-white'
-                : 'text-zinc-400 hover:text-zinc-100'
+            className={`rounded-full px-2.5 py-1 text-xs font-medium transition ${
+              isActive ? 'bg-white text-app' : 'text-white/50 hover:text-white'
             }`}
           >
             {t.language[code]}

@@ -109,11 +109,7 @@ function ModalSurface(): ReactNode {
     seriesContext !== undefined && seriesContext.index < seriesContext.episodes.length - 1;
 
   const kindBadge =
-    target.kind === 'channel'
-      ? t.nav.tv
-      : target.kind === 'movie'
-        ? t.nav.movies
-        : t.nav.series;
+    target.kind === 'channel' ? t.nav.tv : target.kind === 'movie' ? t.nav.movies : t.nav.series;
 
   const downloadName = `${target.name.replace(/[^\w .-]+/g, '').trim() || 'video'}.${targets.data?.extension ?? 'mp4'}`;
 
@@ -121,82 +117,87 @@ function ModalSurface(): ReactNode {
     <ModalShell onClose={close} ariaLabel={target.name} maxWidthClass="max-w-4xl">
       {targets.status === 'error' ? (
         <div className="flex aspect-video flex-col items-center justify-center gap-3 bg-black px-6 text-center">
-          <AlertTriangle className="h-9 w-9 text-red-400" aria-hidden />
-          <p className="text-sm text-zinc-200">{t.playback.loadFailed}</p>
+          <AlertTriangle className="h-7 w-7 text-red-400" aria-hidden />
+          <p className="text-[13px] text-white/70">{t.playback.loadFailed}</p>
         </div>
       ) : targets.data === null ? (
-        <div className="flex aspect-video items-center justify-center bg-black">
-          <Loader2 className="h-9 w-9 animate-spin text-accent" aria-hidden />
+        <div className="flex aspect-video flex-col items-center justify-center gap-3 bg-black">
+          <Loader2 className="h-6 w-6 animate-spin text-white/50" aria-hidden />
+          <p className="text-xs text-white/50">{t.playback.loading}</p>
         </div>
       ) : (
         <VideoStage
           key={`${target.kind}-${target.id}`}
           src={targets.data.proxyUrl}
           extension={targets.data.extension}
-          name={target.name}
           isLive={targets.data.kind === 'live'}
-          copyUrl={targets.data.copyUrl}
         />
       )}
 
-      {/* Info / actions */}
       <div className="space-y-4 p-4 sm:p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium uppercase tracking-wide text-zinc-500">
-              <span className="rounded bg-surface-raised px-1.5 py-0.5">{kindBadge}</span>
+            <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium text-white/46">
+              <span className="rounded bg-white/10 px-1.5 py-0.5">{kindBadge}</span>
               {targets.data !== null && (
-                <span className="rounded bg-surface-raised px-1.5 py-0.5 uppercase">
+                <span className="rounded bg-white/10 px-1.5 py-0.5 tracking-wide">
                   {targets.data.extension}
                 </span>
               )}
             </div>
-            <h2 className="mt-1 truncate text-base font-semibold text-zinc-100">{target.name}</h2>
+            <h2
+              title={target.name}
+              className="mt-1 cursor-pointer truncate text-[15px] font-semibold tracking-tight text-white"
+            >
+              {target.name}
+            </h2>
           </div>
 
           <button
             type="button"
             onClick={close}
             aria-label={t.playback.close}
-            className="shrink-0 rounded-lg border border-line bg-surface p-2 text-zinc-300 transition hover:bg-surface-raised hover:text-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="shrink-0 rounded-[10px] border border-line bg-surface p-2 text-white/60 transition hover:bg-hover hover:text-white"
           >
             <X className="h-4 w-4" aria-hidden />
           </button>
         </div>
 
-        {/* Movie metadata */}
         {target.kind === 'movie' &&
           (movie.status === 'loading' ? (
             <div className="flex animate-pulse gap-4">
-              <div className="h-3 w-3/4 rounded bg-surface-raised" />
+              <div className="h-3 w-3/4 rounded bg-white/10" />
             </div>
           ) : movie.status === 'success' && movie.data !== null ? (
             <div className="space-y-3">
-              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-500">
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-white/46">
                 {movie.data.releaseDate !== null && <span>{movie.data.releaseDate}</span>}
                 {movie.data.duration !== null && <span>{movie.data.duration}</span>}
                 {movie.data.genre !== null && <span>{movie.data.genre}</span>}
-                {movie.data.rating !== null && <span>★ {movie.data.rating}</span>}
+                {movie.data.rating !== null && (
+                  <span className="text-white">★ {movie.data.rating}</span>
+                )}
               </div>
               {movie.data.plot !== null && (
-                <p className="max-w-3xl text-sm leading-relaxed text-zinc-400">{movie.data.plot}</p>
+                <p className="max-w-3xl text-[13px] leading-relaxed text-white/60">
+                  {movie.data.plot}
+                </p>
               )}
               {movie.data.cast !== null && (
-                <p className="text-xs text-zinc-500">
-                  <span className="font-semibold text-zinc-400">{t.playback.cast}: </span>
+                <p className="text-xs text-white/46">
+                  <span className="font-medium text-white/70">{t.playback.cast}: </span>
                   {movie.data.cast}
                 </p>
               )}
             </div>
           ) : null)}
 
-        {/* Actions */}
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={() => void handleCopyLink()}
             disabled={targets.data === null}
-            className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-zinc-100 transition hover:bg-surface-raised focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-[10px] border border-line bg-surface px-3 py-1.5 text-xs font-medium text-white transition hover:bg-hover disabled:cursor-not-allowed disabled:opacity-60"
           >
             <Copy className="h-3.5 w-3.5" aria-hidden />
             {copied ? t.playback.copied : t.playback.copyLink}
@@ -206,7 +207,7 @@ function ModalSurface(): ReactNode {
             <a
               href={`${targets.data.proxyUrl}?dl=1&name=${encodeURIComponent(downloadName)}`}
               download={downloadName}
-              className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-zinc-100 transition hover:bg-surface-raised focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="inline-flex items-center gap-2 rounded-[10px] border border-line bg-surface px-3 py-1.5 text-xs font-medium text-white transition hover:bg-hover"
             >
               <Download className="h-3.5 w-3.5" aria-hidden />
               {t.playback.download}
@@ -217,7 +218,7 @@ function ModalSurface(): ReactNode {
             <button
               type="button"
               onClick={goNextEpisode}
-              className="ml-auto inline-flex items-center gap-2 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-accent/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="ml-auto inline-flex items-center gap-2 rounded-[10px] bg-white px-3 py-1.5 text-xs font-semibold text-app transition hover:bg-white/90"
             >
               {t.playback.nextEpisode}
               <ArrowRight className="h-3.5 w-3.5" aria-hidden />

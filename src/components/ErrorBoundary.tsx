@@ -15,13 +15,13 @@ function BoundaryFallback({ onReset }: { onReset: () => void }) {
 
   return (
     <div className="flex min-h-dvh items-center justify-center px-6">
-      <div className="max-w-sm rounded-xl border border-line bg-surface p-6 text-center">
-        <h1 className="text-base font-semibold text-zinc-100">{t.boundary.title}</h1>
-        <p className="mt-2 text-sm leading-relaxed text-zinc-500">{t.boundary.text}</p>
+      <div className="max-w-sm rounded-[12px] border border-line bg-surface p-6 text-center">
+        <h1 className="text-[15px] font-semibold tracking-tight text-white">{t.boundary.title}</h1>
+        <p className="mt-2 text-[13px] leading-relaxed text-white/56">{t.boundary.text}</p>
         <button
           type="button"
           onClick={onReset}
-          className="mt-4 inline-flex items-center gap-2 rounded-lg border border-line bg-surface-raised px-4 py-2 text-sm font-medium text-zinc-100 transition hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="mt-4 inline-flex items-center gap-2 rounded-[10px] border border-line bg-surface px-4 py-2 text-[13px] font-medium text-white transition hover:bg-hover"
         >
           <RotateCcw className="h-4 w-4" aria-hidden />
           {t.catalog.retry}

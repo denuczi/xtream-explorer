@@ -30,8 +30,9 @@ export function MediaCard({ title, imageUrl, variant, subtitle, badge, onClick }
   return (
     <Wrapper
       {...(interactive ? { type: 'button' as const, onClick } : {})}
-      className={`group overflow-hidden rounded-xl border border-line bg-surface text-left transition ${
-        interactive ? 'cursor-pointer hover:border-accent/60 hover:bg-surface-raised focus-visible:outline-2 focus-visible:outline-accent' : ''
+      title={title}
+      className={`group overflow-hidden rounded-[10px] border border-line bg-surface text-left transition ${
+        interactive ? 'cursor-pointer hover:border-white/15 hover:bg-hover' : ''
       }`}
     >
       <div
@@ -49,23 +50,28 @@ export function MediaCard({ title, imageUrl, variant, subtitle, badge, onClick }
             className={`h-full w-full ${variant === 'channel' ? 'object-contain' : 'object-cover'}`}
           />
         ) : (
-          <FallbackIcon className="h-10 w-10 text-zinc-600" aria-hidden />
+          <FallbackIcon className="h-8 w-8 text-white/20" aria-hidden />
         )}
 
         {badge !== undefined && badge !== null && badge.length > 0 && (
-          <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-md bg-app/85 px-1.5 py-0.5 text-[11px] font-semibold text-amber-300">
-            <Star className="h-3 w-3" aria-hidden />
+          <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-md bg-black/75 px-1.5 py-0.5 text-[11px] font-medium text-white backdrop-blur">
+            <Star className="h-3 w-3 text-white/80" aria-hidden />
             {badge}
           </span>
         )}
       </div>
 
-      <div className="px-2 py-2">
-        <p className="line-clamp-2 min-h-[2rem] text-xs font-medium leading-tight text-zinc-100">
+      <div className="px-2.5 py-2.5">
+        <p
+          title={title.length > 0 ? title : undefined}
+          className="line-clamp-2 min-h-[2rem] cursor-pointer text-[13px] font-medium leading-tight text-white"
+        >
           {title.length > 0 ? title : '…'}
         </p>
         {subtitle !== undefined && subtitle !== null && subtitle.length > 0 && (
-          <p className="mt-0.5 truncate text-[11px] text-zinc-500">{subtitle}</p>
+          <p title={subtitle} className="mt-1 cursor-pointer truncate text-[11px] text-white/46">
+            {subtitle}
+          </p>
         )}
       </div>
     </Wrapper>

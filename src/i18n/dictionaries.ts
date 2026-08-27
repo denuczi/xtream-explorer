@@ -135,10 +135,7 @@ const en = {
 export type Dictionary = typeof en;
 
 /** Replaces `{name}` placeholders in dictionary strings. */
-export function interpolate(
-  template: string,
-  params: Record<string, string | number>,
-): string {
+export function interpolate(template: string, params: Record<string, string | number>): string {
   return template.replace(/\{(\w+)\}/g, (_, key: string) =>
     key in params ? String(params[key]) : `{${key}}`,
   );
@@ -148,10 +145,10 @@ export const dictionaries: Record<Locale, Dictionary> = {
   en,
   es: {
     appName: 'Xtream Media Explorer',
-  common: {
-    cancel: 'Cancel',
-    backToTop: 'Back to top',
-  },
+    common: {
+      cancel: 'Cancel',
+      backToTop: 'Back to top',
+    },
     nav: {
       tv: 'TV',
       movies: 'Películas',

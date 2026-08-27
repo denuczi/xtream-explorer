@@ -13,11 +13,7 @@ export function SeriesPage({ connectionId }: SeriesPageProps) {
 
   if (selected !== null) {
     return (
-      <SeriesDetailPanel
-        key={selected.id}
-        summary={selected}
-        onBack={() => setSelected(null)}
-      />
+      <SeriesDetailPanel key={selected.id} summary={selected} onBack={() => setSelected(null)} />
     );
   }
 

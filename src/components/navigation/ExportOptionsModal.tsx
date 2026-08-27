@@ -62,28 +62,28 @@ export function ExportOptionsModal({ connectionId, type, onClose }: ExportOption
 
   return (
     <ModalShell onClose={onClose} ariaLabel={t.playlists.exportTitle}>
-      <form onSubmit={handleSubmit} className="space-y-5 p-5">
+      <form onSubmit={handleSubmit} className="space-y-5 p-5 sm:p-6">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-base font-semibold text-zinc-100">{t.playlists.exportTitle}</h2>
-            <p className="mt-0.5 text-xs text-zinc-500">
+            <h2 className="text-[15px] font-semibold tracking-tight text-white">
+              {t.playlists.exportTitle}
+            </h2>
+            <p className="mt-0.5 text-[11px] text-white/46">
               {type === 'tv' ? t.nav.tv : t.nav.movies} · M3U8
             </p>
           </div>
         </div>
 
         <fieldset className="space-y-2">
-          <legend className="text-xs font-medium uppercase tracking-wide text-zinc-400">
-            {t.playlists.uaHeading}
-          </legend>
+          <legend className="text-[11px] font-medium text-white/56">{t.playlists.uaHeading}</legend>
 
           {UA_CHOICES.map((choice) => (
             <label
               key={choice}
-              className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition ${
+              className={`flex cursor-pointer items-start gap-3 rounded-[10px] border p-3 transition ${
                 uaChoice === choice
-                  ? 'border-accent bg-accent/10'
-                  : 'border-line bg-surface hover:bg-surface-raised'
+                  ? 'border-white bg-white text-app'
+                  : 'border-line bg-surface hover:bg-hover'
               }`}
             >
               <input
@@ -92,10 +92,12 @@ export function ExportOptionsModal({ connectionId, type, onClose }: ExportOption
                 value={choice}
                 checked={uaChoice === choice}
                 onChange={() => setUaChoice(choice)}
-                className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-accent)]"
+                className="mt-0.5 h-4 w-4 shrink-0 accent-white"
               />
               <span className="min-w-0">
-                <span className="block text-sm font-medium text-zinc-100">
+                <span
+                  className={`block text-[13px] font-medium ${uaChoice === choice ? 'text-app' : 'text-white'}`}
+                >
                   {choice === 'default'
                     ? t.playlists.uaOptionDefault
                     : choice === 'none'
@@ -103,12 +105,16 @@ export function ExportOptionsModal({ connectionId, type, onClose }: ExportOption
                       : t.playlists.uaOptionCustom}
                 </span>
                 {choice === 'default' && defaultUa !== null && (
-                  <span className="mt-0.5 block truncate text-[11px] text-zinc-500">
+                  <span
+                    className={`mt-0.5 block truncate text-[11px] ${uaChoice === choice ? 'text-app/60' : 'text-white/46'}`}
+                  >
                     {interpolate(t.playlists.uaCurrentValue, { value: defaultUa })}
                   </span>
                 )}
                 {choice === 'none' && (
-                  <span className="mt-0.5 block text-[11px] text-zinc-500">
+                  <span
+                    className={`mt-0.5 block text-[11px] ${uaChoice === choice ? 'text-app/60' : 'text-white/46'}`}
+                  >
                     {t.playlists.uaNoneHint}
                   </span>
                 )}
@@ -127,8 +133,8 @@ export function ExportOptionsModal({ connectionId, type, onClose }: ExportOption
               spellCheck={false}
               autoComplete="off"
               aria-invalid={customInvalid}
-              className={`w-full rounded-lg border bg-surface px-3 py-2 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-500 focus:ring-2 focus:ring-accent/30 ${
-                customInvalid ? 'border-red-500/60' : 'border-line focus:border-accent'
+              className={`w-full rounded-[10px] border bg-surface px-3 py-2 text-[13px] text-white outline-none transition placeholder:text-white/30 focus:ring-2 focus:ring-white/10 ${
+                customInvalid ? 'border-red-500/60' : 'border-line focus:border-white/20'
               }`}
             />
           )}
@@ -140,7 +146,10 @@ export function ExportOptionsModal({ connectionId, type, onClose }: ExportOption
         </fieldset>
 
         {failed && (
-          <p role="alert" className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+          <p
+            role="alert"
+            className="rounded-[10px] border border-red-500/20 bg-red-500/10 px-3 py-2 text-[13px] text-red-200"
+          >
             {t.catalog.downloadFailed}
           </p>
         )}
@@ -150,14 +159,14 @@ export function ExportOptionsModal({ connectionId, type, onClose }: ExportOption
             type="button"
             onClick={onClose}
             disabled={busy}
-            className="rounded-lg border border-line bg-surface px-4 py-2 text-sm font-medium text-zinc-200 transition hover:bg-surface-raised focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-[10px] border border-line bg-surface px-4 py-2 text-[13px] font-medium text-white transition hover:bg-hover disabled:cursor-not-allowed disabled:opacity-60"
           >
             {t.common.cancel}
           </button>
           <button
             type="submit"
             disabled={busy || customInvalid}
-            className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition hover:bg-accent/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-[10px] bg-white px-4 py-2 text-[13px] font-semibold text-app transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {busy ? (
               <>
@@ -176,4 +185,3 @@ export function ExportOptionsModal({ connectionId, type, onClose }: ExportOption
     </ModalShell>
   );
 }
-

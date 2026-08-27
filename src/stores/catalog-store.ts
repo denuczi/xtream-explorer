@@ -1,12 +1,7 @@
 import { create } from 'zustand';
 import { ApiError, getAllStreams, getCategories, getSeriesDetail, getStreams } from '../lib/api';
 import { useConnectionStore } from './connection-store';
-import type {
-  CatalogItem,
-  CatalogType,
-  Category,
-  SeriesDetail,
-} from '../types/models';
+import type { CatalogItem, CatalogType, Category, SeriesDetail } from '../types/models';
 
 export type LoadStatus = 'idle' | 'loading' | 'success' | 'error';
 

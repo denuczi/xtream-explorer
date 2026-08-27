@@ -55,17 +55,19 @@ export function PlaylistDownloadButton({ connectionId, type }: PlaylistDownloadB
         disabled={busy}
         title={`${t.catalog.downloadPlaylist} (${hint})`}
         aria-label={`${t.catalog.downloadPlaylist} (${hint})`}
-        className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-2 text-xs font-semibold text-zinc-200 transition hover:bg-surface-raised hover:text-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex items-center gap-2 rounded-[10px] border border-line bg-surface px-3 py-2 text-xs font-medium text-white transition hover:bg-hover disabled:cursor-not-allowed disabled:opacity-60"
       >
         {busy ? (
-          <Loader2 className="h-4 w-4 animate-spin text-accent" aria-hidden />
+          <Loader2 className="h-4 w-4 animate-spin text-white/60" aria-hidden />
         ) : (
           <Download className="h-4 w-4" aria-hidden />
         )}
         <span className="hidden sm:inline">
           {busy ? t.catalog.preparingDownload : t.catalog.downloadPlaylist}
         </span>
-        <span className="rounded bg-surface-raised px-1 py-0.5 text-[10px] uppercase">{hint}</span>
+        <span className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-medium tracking-wide text-white/70">
+          {hint}
+        </span>
       </button>
       {failed && (
         <span role="alert" className="text-[11px] text-red-400">

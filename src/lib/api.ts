@@ -124,7 +124,9 @@ export async function postConnection(credentials: ConnectionCredentials): Promis
   return connectResponseSchema.parse(raw);
 }
 
-export async function getAccount(connectionId: string): Promise<{ account: ConnectResult['account'] }> {
+export async function getAccount(
+  connectionId: string,
+): Promise<{ account: ConnectResult['account'] }> {
   const raw = await requestJson<unknown>('/account', {
     method: 'GET',
     headers: headersWithConnectionId(connectionId),
@@ -343,18 +345,18 @@ export async function getPlayable(
   type: CatalogType,
   id: string,
 ): Promise<StreamTargets> {
-  const raw = await requestJson<unknown>(
-    `/playable/${type}/${encodeURIComponent(id)}`,
-    { method: 'GET', headers: headersWithConnectionId(connectionId) },
-  );
+  const raw = await requestJson<unknown>(`/playable/${type}/${encodeURIComponent(id)}`, {
+    method: 'GET',
+    headers: headersWithConnectionId(connectionId),
+  });
   return streamTargetsSchema.parse(raw);
 }
 
 export async function getVodDetail(connectionId: string, movieId: string): Promise<VodDetail> {
-  const raw = await requestJson<unknown>(
-    `/vod/${encodeURIComponent(movieId)}`,
-    { method: 'GET', headers: headersWithConnectionId(connectionId) },
-  );
+  const raw = await requestJson<unknown>(`/vod/${encodeURIComponent(movieId)}`, {
+    method: 'GET',
+    headers: headersWithConnectionId(connectionId),
+  });
   return z.object({ movie: vodDetailSchema }).parse(raw).movie;
 }
 
@@ -418,8 +420,7 @@ export async function downloadPlaylist(
 
   const blob = await response.blob();
   const disposition = response.headers.get('content-disposition') ?? '';
-  const filename =
-    /filename="([^"]+)"/.exec(disposition)?.[1] ?? FALLBACK_EXPORT_NAMES[type];
+  const filename = /filename="([^"]+)"/.exec(disposition)?.[1] ?? FALLBACK_EXPORT_NAMES[type];
 
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
