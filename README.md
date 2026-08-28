@@ -14,6 +14,8 @@ Local web client for exploring Xtream Codes accounts — live TV, movies and ser
 
 Xtream Media Explorer runs entirely on your machine. It acts as a local client for an existing Xtream Codes account and presents its catalog in a unified web interface.
 
+[![Ver demo](./public/demo/Captura%20de%20pantalla%20de%202026-08-27%2015-22-50.png)](https://youtu.be/cOxkIr03DB8)
+
 This project does not host, create, or resell any IPTV service. It only queries the credentials you provide and displays the data returned by that server.
 
 ### Features
