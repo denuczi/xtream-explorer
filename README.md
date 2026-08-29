@@ -33,6 +33,23 @@ This project does not host, create, or resell any IPTV service. It only queries 
 
 ---
 
+## 📦 Downloads (Desktop App)
+
+Pre-built binaries packaged with **Electron** are available for Linux distributions (Debian, Ubuntu, Linux Mint, etc.).
+
+### Debian / Ubuntu / Linux Mint (.deb)
+
+1. Download `xtream-media-explorer_1.0.0_amd64.deb` from the [Latest Release](https://github.com/denuczi/xtream-explorer/releases/latest) page.
+2. Install it using your terminal:
+
+```bash
+sudo apt install ./xtream-media-explorer_1.0.0_amd64.deb
+```
+
+---
+
+If you don't use Linux:
+
 ## Prerequisites
 
 - **Node.js** >= 22 — https://nodejs.org
