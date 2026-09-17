@@ -17,6 +17,8 @@ Xtream Media Explorer runs entirely on your machine. It acts as a local client f
 [![Ver demo](./public/demo/Captura%20de%20pantalla%20de%202026-08-27%2015-21-36.png)](https://youtu.be/cOxkIr03DB8)
 [![Ver demo](./public/demo/Captura%20de%20pantalla%20de%202026-08-27%2015-22-50.png)](https://youtu.be/cOxkIr03DB8)
 
+![Architecture Diagram](./public/demo/diagram.png)
+
 This project does not host, create, or resell any IPTV service. It only queries the credentials you provide and displays the data returned by that server.
 
 ### Features
